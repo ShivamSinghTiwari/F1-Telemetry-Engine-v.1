@@ -328,6 +328,8 @@ with st.sidebar:
         "Austria", "British", "Hungary", "Belgium", "Netherlands",
         "Italy", "Azerbaijan", "Singapore", "United States", "Mexico City",
         "São Paulo", "Las Vegas", "Qatar", "Abu Dhabi", "Madrid",
+        # 2026 only — Barcelona uses a different FastF1 event name
+        "Barcelona-Catalunya",
     ]
     race = st.selectbox("Grand Prix", RACES, index=0)
     session_type = st.selectbox(
@@ -416,7 +418,12 @@ if "loaded_key_b" not in st.session_state:
 if load_btn:
     with st.spinner("Loading Session A…"):
         try:
-            sess = fastf1.get_session(year, race, session_type)
+            # 2026 Barcelona uses "Barcelona-Catalunya" in the dropdown
+            # but FastF1 indexes it as "Spanish Grand Prix" or "Spain"
+            _race_name = race
+            if year == 2026 and race == "Barcelona-Catalunya":
+                _race_name = "Spain"
+            sess = fastf1.get_session(year, _race_name, session_type)
             sess.load()
             st.session_state.session = sess
             st.session_state.loaded_key = current_key
