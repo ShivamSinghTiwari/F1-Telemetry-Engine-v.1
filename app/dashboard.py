@@ -323,13 +323,32 @@ with st.sidebar:
     year = st.selectbox("Year", [2026, 2025, 2024, 2023, 2022, 2021], index=0)
 
     RACES = [
-        "Bahrain", "Saudi Arabia", "Australia", "Japan", "China",
-        "Miami", "Emilia Romagna", "Monaco", "Canada", "Spain",
-        "Austria", "British", "Hungary", "Belgium", "Netherlands",
-        "Italy", "Azerbaijan", "Singapore", "United States", "Mexico City",
-        "São Paulo", "Las Vegas", "Qatar", "Abu Dhabi", "Madrid",
-        # 2026 only — Barcelona uses a different FastF1 event name
-        "Barcelona-Catalunya",
+        # Full FastF1 event names — these work for all seasons
+        "Australian Grand Prix",
+        "Chinese Grand Prix",
+        "Japanese Grand Prix",
+        "Bahrain Grand Prix",
+        "Saudi Arabian Grand Prix",
+        "Miami Grand Prix",
+        "Emilia Romagna Grand Prix",
+        "Monaco Grand Prix",
+        "Canadian Grand Prix",
+        "Barcelona Grand Prix",    # 2026 Round 7 — Barcelona
+        "Spanish Grand Prix",      # 2026 Round 14 — Madrid / pre-2026 = Barcelona
+        "Austrian Grand Prix",
+        "British Grand Prix",
+        "Hungarian Grand Prix",
+        "Belgian Grand Prix",
+        "Dutch Grand Prix",
+        "Italian Grand Prix",
+        "Azerbaijan Grand Prix",
+        "Singapore Grand Prix",
+        "United States Grand Prix",
+        "Mexico City Grand Prix",
+        "São Paulo Grand Prix",
+        "Las Vegas Grand Prix",
+        "Qatar Grand Prix",
+        "Abu Dhabi Grand Prix",
     ]
     race = st.selectbox("Grand Prix", RACES, index=0)
     session_type = st.selectbox(
@@ -418,12 +437,7 @@ if "loaded_key_b" not in st.session_state:
 if load_btn:
     with st.spinner("Loading Session A…"):
         try:
-            # 2026 Barcelona uses "Barcelona-Catalunya" in the dropdown
-            # but FastF1 indexes it as "Spanish Grand Prix" or "Spain"
-            _race_name = race
-            if year == 2026 and race == "Barcelona-Catalunya":
-                _race_name = "Spain"
-            sess = fastf1.get_session(year, _race_name, session_type)
+            sess = fastf1.get_session(year, race, session_type)
             sess.load()
             st.session_state.session = sess
             st.session_state.loaded_key = current_key
